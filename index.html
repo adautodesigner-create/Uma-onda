@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f3f0e8">
+<meta name="description" content="Organize tarefas e lembretes no seu ritmo.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icons/icon.svg" type="image/svg+xml">
+<title>Um Passo — no seu ritmo</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--ink);background:var(--bg);font-size:16px;--bg:#f3f0e8;--surface:#fffefa;--soft:#e8ede4;--ink:#27352b;--muted:#657267;--line:#dfe4db;--accent:#52765c;--accent-ink:#fff;--focus:#a1b7a3;--shadow:0 8px 24px #27352b0b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);min-height:100dvh}button,input,select{font:inherit}button{cursor:pointer;color:inherit}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--focus);outline-offset:3px}button:disabled{opacity:.45;cursor:not-allowed}
+body[data-theme="lavanda"]{--bg:#f2eff8;--surface:#fff;--soft:#e8e1f3;--ink:#30283e;--muted:#6c627c;--line:#e0d9eb;--accent:#6d5790;--accent-ink:#fff;--focus:#a995c8}
+body[data-theme="oceano"]{--bg:#edf4f5;--surface:#fff;--soft:#dcecef;--ink:#20353b;--muted:#536d74;--line:#d5e3e6;--accent:#276b79;--accent-ink:#fff;--focus:#83b7c1}
+body[data-theme="rosa"]{--bg:#fff0f2;--surface:#fff;--soft:#f9dfe5;--ink:#482b35;--muted:#785965;--line:#efd1d9;--accent:#a34665;--accent-ink:#fff;--focus:#d58ba2}
+body[data-theme="solar"]{--bg:#fff4e5;--surface:#fffdf8;--soft:#ffe6bd;--ink:#49331c;--muted:#796044;--line:#ecd9bd;--accent:#a65b19;--accent-ink:#fff;--focus:#d89b51}
+body[data-theme="menta"]{--bg:#eaf5ef;--surface:#fff;--soft:#d8ebe0;--ink:#233a30;--muted:#587064;--line:#d0e2d7;--accent:#34745b;--accent-ink:#fff;--focus:#8ab9a0}
+body[data-theme="grafite"]{--bg:#e9eaec;--surface:#fff;--soft:#d9dce0;--ink:#252a31;--muted:#59616b;--line:#cfd3d8;--accent:#46515f;--accent-ink:#fff;--focus:#8b9aaa}
+body[data-theme="ceu"]{--bg:#eaf3ff;--surface:#fff;--soft:#d7e7fb;--ink:#203653;--muted:#536b8a;--line:#cfdef1;--accent:#356ba8;--accent-ink:#fff;--focus:#86addb}
+body[data-theme="alto-contraste"]{--bg:#fff;--surface:#fff;--soft:#eee;--ink:#080808;--muted:#292929;--line:#555;--accent:#111;--accent-ink:#fff;--focus:#005fcc}
+body[data-theme="daltonismo"]{--bg:#f4f2e9;--surface:#fff;--soft:#e5e9e9;--ink:#202c38;--muted:#4b5966;--line:#d4dadd;--accent:#315d7d;--accent-ink:#fff;--focus:#d08b26}
+body[data-theme="escuro"]{--bg:#171d19;--surface:#222a24;--soft:#303b32;--ink:#f1f4ef;--muted:#b7c2b8;--line:#3c493f;--accent:#9ab99e;--accent-ink:#172019;--focus:#c6e3cb}
+body.large{font-size:19px}body.small{font-size:14px}body.reading{letter-spacing:.025em;line-height:1.65}body.reading p,body.reading label,body.reading .task-title{line-height:1.7}body.reduce-motion *,body.reduce-motion *:before,body.reduce-motion *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+.shell{max-width:720px;margin:auto;padding:0 20px calc(112px + env(safe-area-inset-bottom))}.top{height:64px;display:flex;align-items:center;justify-content:space-between}.brand{font-weight:800;letter-spacing:-.04em;font-size:1.12rem;display:flex;align-items:center;gap:9px}.brand-icon{width:30px;height:30px;border-radius:11px;background:var(--soft);display:grid;place-items:center;color:var(--accent);font-size:20px}.icon-btn,.close{border:0;background:transparent;border-radius:12px;min-width:42px;min-height:42px;font-size:1.2rem}
+.welcome{padding:35px 0 28px}.eyebrow{font-size:.68rem;font-weight:800;letter-spacing:.13em;color:var(--muted);margin:0 0 8px}.welcome h1{font-size:clamp(2rem,7vw,2.8rem);letter-spacing:-.06em;line-height:1.08;margin:0}.welcome h1 span{color:var(--accent)}.welcome p:last-child{color:var(--muted);margin:11px 0 0;line-height:1.5}
+.section{margin:0 0 28px}.section-head{display:flex;align-items:end;justify-content:space-between;margin-bottom:12px}.section-head h2{margin:0;font-size:1.45rem;letter-spacing:-.04em}.pill{font-size:.75rem;color:var(--muted);background:var(--soft);padding:7px 11px;border-radius:99px}
+.card,.task{background:var(--surface);border:1px solid var(--line);border-radius:19px;box-shadow:var(--shadow)}.card{padding:18px;display:flex;align-items:center;gap:13px}.empty-icon{width:42px;height:42px;flex:none;border-radius:14px;background:var(--soft);display:grid;place-items:center;color:var(--accent);font-size:1.4rem}.card h3{margin:0 0 5px;font-size:1.02rem}.card p{margin:0;color:var(--muted);font-size:.87rem;line-height:1.5}.task-list{display:grid;gap:9px}.task{padding:13px 14px;display:flex;align-items:center;gap:11px}.task.done{opacity:.58}.task.done .task-title{text-decoration:line-through}.check{width:28px;height:28px;flex:none;border-radius:50%;border:1.5px solid var(--muted);background:transparent;display:grid;place-items:center;font-size:.9rem}.check[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.task-body{min-width:0;flex:1}.task-title{font-weight:650;overflow-wrap:anywhere;line-height:1.4}.meta{font-size:.77rem;color:var(--muted);margin-top:4px}.task-actions{display:flex;gap:5px}.mini{border:1px solid var(--line);background:var(--surface);border-radius:10px;min-width:36px;min-height:36px}
+.add{position:fixed;z-index:4;bottom:calc(78px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);border:0;border-radius:99px;background:var(--accent);color:var(--accent-ink);font-weight:750;padding:14px 22px;min-height:50px;white-space:nowrap;box-shadow:0 8px 24px #17251b2b}.nav{position:fixed;z-index:3;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,720px);display:flex;justify-content:space-around;padding:9px 14px calc(10px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--bg) 94%,transparent);backdrop-filter:blur(14px);border-top:1px solid var(--line)}.nav button{border:0;background:transparent;color:var(--muted);display:grid;justify-items:center;gap:3px;padding:5px 18px;border-radius:12px;font-size:.7rem}.nav button span:first-child{font-size:1.2rem}.nav button.active{color:var(--accent);font-weight:800}
+dialog{width:min(calc(100% - 26px),490px);max-height:88dvh;overflow:auto;border:1px solid var(--line);border-radius:24px;padding:23px;background:var(--surface);color:var(--ink);box-shadow:0 20px 70px #10181040}dialog::backdrop{background:#18221c9c;backdrop-filter:blur(3px)}.dialog-head{display:flex;justify-content:space-between;gap:10px;align-items:start;margin-bottom:15px}.dialog-head h2{margin:0;font-size:1.35rem;letter-spacing:-.04em}.form{display:grid;gap:12px}label{font-weight:700;font-size:.85rem;display:block;margin-bottom:7px}input:not([type=checkbox]):not([type=range]),select{width:100%;min-height:47px;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}.row{display:grid;grid-template-columns:1fr 1fr;gap:11px}.field{min-width:0}.hint{font-size:.78rem;color:var(--muted);line-height:1.5;margin:3px 0 7px}.primary,.secondary{min-height:47px;border-radius:13px;padding:11px 15px;font-weight:750}.primary{border:0;background:var(--accent);color:var(--accent-ink)}.secondary{border:1px solid var(--line);background:var(--surface);color:var(--ink)}.setting{padding:14px 0;border-bottom:1px solid var(--line)}.setting:last-of-type{border:0}.setting-title{font-weight:750;margin-bottom:10px}.theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.theme-choice{border:1px solid var(--line);background:var(--surface);border-radius:13px;padding:10px;text-align:left;display:flex;align-items:center;gap:9px;font-size:.84rem}.theme-choice[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:1px}.swatches{display:flex;gap:3px}.swatches i{width:14px;height:22px;border-radius:5px;display:block}.switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;font-weight:500}.switch-row input{width:20px;height:20px;accent-color:var(--accent)}.range-labels{display:flex;justify-content:space-between;color:var(--muted);font-size:.72rem}.focus-dialog{text-align:center}.focus-dialog .dialog-head{text-align:left}.timer{font-size:clamp(3.3rem,16vw,5rem);font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums;padding:16px 0}.timer-options{display:flex;justify-content:center;gap:7px;flex-wrap:wrap}.timer-options button{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:9px 12px;font-size:.8rem}.timer-options button.selected{background:var(--soft);border-color:var(--accent);font-weight:750}.focus-actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0}.toast{position:fixed;z-index:9;bottom:145px;left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font-size:.84rem;max-width:calc(100% - 30px);text-align:center;transition:opacity .18s,transform .18s}.toast.show{opacity:1;transform:translate(-50%,0)}.alarm-dialog{text-align:center;border:2px solid var(--accent)}.alarm-dialog h2{font-size:1.5rem;margin:0 0 8px}.alarm-bell{font-size:2.4rem;margin:6px 0}.hidden{display:none!important}.section.focus-hidden{display:none}
+@media(min-width:600px){.shell{padding-left:32px;padding-right:32px}.welcome{padding-top:48px}}@media(max-width:390px){.shell{padding-left:15px;padding-right:15px}.row{grid-template-columns:1fr}.theme-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="top"><div class="brand"><span class="brand-icon" aria-hidden="true">↗</span> um passo</div><button class="icon-btn" id="open-settings" aria-label="Configurações">⚙</button></header>
+<main>
+<section class="welcome"><p class="eyebrow" id="date-label">SEU DIA</p><h1>Vamos com calma<span>.</span></h1><p>Escolha um próximo passo. O resto pode esperar.</p></section>
+<section class="section" id="now-section"><div class="section-head"><div><p class="eyebrow">UM PASSO DE CADA VEZ</p><h2>Agora</h2></div><span class="pill" id="task-count">0 tarefas</span></div><div id="current"></div></section>
+<section class="section" id="later-section"><div class="section-head"><div><p class="eyebrow">SEM PRESSA</p><h2>Depois</h2></div></div><div id="tasks" class="task-list"></div></section>
+</main>
+</div>
+<button class="add" id="add-task">＋ Nova tarefa</button>
+<nav class="nav" aria-label="Navegação"><button class="active" aria-current="page"><span>⌂</span>Início</button><button id="open-focus"><span>◷</span>Foco</button><button id="nav-settings"><span>☷</span>Ajustes</button></nav>
+
+<dialog id="task-modal">
+<form id="task-form" class="form">
+<input type="hidden" id="editing-id"><div class="dialog-head"><div><p class="eyebrow">NOVA TAREFA</p><h2 id="task-modal-title">O que você precisa fazer?</h2></div><button type="button" class="close" data-close="task-modal" aria-label="Fechar">×</button></div>
+<div><label for="task-name">Nome da tarefa</label><input id="task-name" maxlength="120" placeholder="Ex.: Preparar materiais da aula" required></div>
+<div class="row"><div class="field"><label for="task-when">Quando?</label><select id="task-when"><option value="now">Agora</option><option value="today">Hoje</option><option value="later" selected>Depois</option></select></div><div class="field"><label for="task-time">Horário (opcional)</label><input id="task-time" type="time"></div></div>
+<div><label for="task-remind">Lembrete</label><select id="task-remind"><option value="none">Sem lembrete</option><option value="at">No horário da tarefa</option><option value="5">5 minutos antes</option><option value="15">15 minutos antes</option><option value="30">30 minutos antes</option></select></div>
+<p class="hint">Para receber um alarme, informe um horário e escolha um lembrete. O aviso sonoro e visual funciona com o app aberto; em segundo plano ou com o app fechado, o navegador pode não executar o alarme.</p>
+<button class="primary" type="submit">Salvar tarefa</button>
+</form></dialog>
+
+<dialog id="settings-modal">
+<div class="dialog-head"><div><p class="eyebrow">PERSONALIZE</p><h2>Seu jeito de usar</h2></div><button class="close" data-close="settings-modal" aria-label="Fechar">×</button></div>
+<div class="setting"><div class="setting-title">Tema de cores</div><div class="theme-grid" id="theme-grid">
+<button class="theme-choice" data-theme-choice="natural" aria-pressed="true"><span class="swatches"><i style="background:#f3f0e8"></i><i style="background:#52765c"></i><i style="background:#27352b"></i></span>Natural</button>
+<button class="theme-choice" data-theme-choice="lavanda" aria-pressed="false"><span class="swatches"><i style="background:#f2eff8"></i><i style="background:#6d5790"></i><i style="background:#30283e"></i></span>Lavanda</button>
+<button class="theme-choice" data-theme-choice="oceano" aria-pressed="false"><span class="swatches"><i style="background:#edf4f5"></i><i style="background:#276b79"></i><i style="background:#20353b"></i></span>Oceano</button>
+<button class="theme-choice" data-theme-choice="rosa" aria-pressed="false"><span class="swatches"><i style="background:#fff0f2"></i><i style="background:#a34665"></i><i style="background:#482b35"></i></span>Rosa</button>
+<button class="theme-choice" data-theme-choice="solar" aria-pressed="false"><span class="swatches"><i style="background:#fff4e5"></i><i style="background:#a65b19"></i><i style="background:#49331c"></i></span>Solar</button>
+<button class="theme-choice" data-theme-choice="menta" aria-pressed="false"><span class="swatches"><i style="background:#eaf5ef"></i><i style="background:#34745b"></i><i style="background:#233a30"></i></span>Menta</button>
+<button class="theme-choice" data-theme-choice="grafite" aria-pressed="false"><span class="swatches"><i style="background:#e9eaec"></i><i style="background:#46515f"></i><i style="background:#252a31"></i></span>Grafite</button>
+<button class="theme-choice" data-theme-choice="ceu" aria-pressed="false"><span class="swatches"><i style="background:#eaf3ff"></i><i style="background:#356ba8"></i><i style="background:#203653"></i></span>Céu</button>
+<button class="theme-choice" data-theme-choice="daltonismo" aria-pressed="false"><span class="swatches"><i style="background:#f4f2e9"></i><i style="background:#315d7d"></i><i style="background:#d08b26"></i></span>Azul e âmbar</button>
+<button class="theme-choice" data-theme-choice="alto-contraste" aria-pressed="false"><span class="swatches"><i style="background:#fff"></i><i style="background:#111"></i><i style="background:#555"></i></span>Alto contraste</button>
+<button class="theme-choice" data-theme-choice="escuro" aria-pressed="false"><span class="swatches"><i style="background:#171d19"></i><i style="background:#9ab99e"></i><i style="background:#f1f4ef"></i></span>Escuro</button>
+</div><p class="hint">Os temas mudam a paleta geral. O tema azul e âmbar evita depender apenas de diferenças entre vermelho e verde, mas não substitui testes individuais de daltonismo.</p></div>
+<div class="setting"><label for="font-range">Tamanho do texto <strong id="font-label">Padrão</strong></label><input id="font-range" type="range" min="0" max="2" step="1" value="1" style="width:100%;accent-color:var(--accent)"><div class="range-labels"><span>Menor</span><span>Maior</span></div></div>
+<div class="setting"><label class="switch-row" for="reading"><span>Leitura facilitada <small class="hint">Mais espaçamento entre letras e linhas</small></span><input id="reading" type="checkbox"></label></div>
+<div class="setting"><label class="switch-row" for="simple"><span>Visual simplificado <small class="hint">Esconder a lista secundária</small></span><input id="simple" type="checkbox"></label></div>
+<div class="setting"><label class="switch-row" for="motion"><span>Reduzir animações</span><input id="motion" type="checkbox"></label></div>
+<div class="setting"><button class="secondary" id="enable-notifications" style="width:100%">Ativar notificações neste dispositivo</button><p class="hint" id="notification-status">Permissão de notificação ainda não solicitada.</p><button class="secondary" id="test-alarm" style="width:100%;margin-top:8px">Testar som do alarme</button><p class="hint">O alarme sonoro e os avisos funcionam com o app aberto. O navegador pode suspender a execução em segundo plano; alarmes garantidos com o app fechado exigem outro mecanismo.</p></div>
+<p class="hint">As preferências e tarefas ficam salvas neste navegador e dispositivo.</p>
+</dialog>
+
+<dialog id="alarm-modal" class="alarm-dialog"><div class="alarm-bell" aria-hidden="true">🔔</div><h2>Hora da sua tarefa</h2><p id="alarm-task-name"></p><p class="hint">Seu lembrete chegou.</p><button class="primary" id="dismiss-alarm" style="width:100%">Entendi</button></dialog>
+
+<dialog id="focus-modal" class="focus-dialog">
+<div class="dialog-head"><div><p class="eyebrow">MODO FOCO</p><h2>Comece pequeno</h2></div><button class="close" data-close="focus-modal" aria-label="Fechar">×</button></div>
+<p id="focus-name">Escolha uma tarefa para começar.</p><div class="timer" id="timer">10:00</div>
+<div class="timer-options"><button data-min="5">5 min</button><button data-min="10" class="selected">10 min</button><button data-min="15">15 min</button><button data-min="25">25 min</button></div>
+<div class="focus-actions"><button class="primary" id="timer-start">Começar</button><button class="secondary" id="timer-reset">Reiniciar</button></div>
+<p class="hint">O cronômetro funciona enquanto esta tela estiver aberta.</p>
+</dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const STORAGE="um-passo-v2-tasks", PREFS="um-passo-v2-prefs";
+let tasks=[],prefs={theme:"natural",font:1,reading:false,simple:false,motion:false},timerSecs=600,timerId=null,running=false,toastId=null;
+const themes=["natural","lavanda","oceano","rosa","solar","menta","grafite","ceu","daltonismo","alto-contraste","escuro"];
+let audioCtx=null, alarmInterval=null, firedAlarms=new Set();
+function toast(msg){const el=$("#toast");el.textContent=msg;el.classList.add("show");clearTimeout(toastId);toastId=setTimeout(()=>el.classList.remove("show"),2600)}
+function saveTasks(){localStorage.setItem(STORAGE,JSON.stringify(tasks));}
+function load(){try{tasks=JSON.parse(localStorage.getItem(STORAGE)||"[]")}catch{tasks=[]}try{prefs={...prefs,...JSON.parse(localStorage.getItem(PREFS)||"{}")}}catch{}}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function whenLabel(t){return t.time?`${t.when==="later"?"Depois":"Hoje"} · ${t.time}`:({now:"Quando puder",today:"Hoje",later:"Sem horário definido"}[t.when])}
+function taskHTML(t,featured=false){return `<article class="task ${t.done?"done":""}" ${featured?'style="padding:17px"':""}><button class="check" data-done="${t.id}" aria-label="${t.done?"Reabrir":"Concluir"} ${esc(t.title)}" aria-pressed="${t.done}">${t.done?"✓":""}</button><div class="task-body"><div class="task-title">${esc(t.title)}</div><div class="meta">${esc(whenLabel(t))}</div></div><div class="task-actions">${featured&&!t.done?`<button class="mini" data-start="${t.id}" aria-label="Iniciar foco para ${esc(t.title)}" title="Foco">▶</button>`:""}<button class="mini" data-edit="${t.id}" aria-label="Editar ${esc(t.title)}" title="Editar">✎</button><button class="mini" data-delete="${t.id}" aria-label="Excluir ${esc(t.title)}" title="Excluir">×</button></div></article>`}
+function render(){
+ const open=tasks.filter(t=>!t.done),cur=open.find(t=>t.when==="now")||open.find(t=>t.when==="today")||open[0];
+ $("#task-count").textContent=`${open.length} ${open.length===1?"tarefa":"tarefas"}`;
+ $("#current").innerHTML=cur?taskHTML(cur,true):`<div class="card"><div class="empty-icon" aria-hidden="true">✳</div><div><h3>Nenhuma tarefa por aqui</h3><p>Adicione uma tarefa ou aproveite este espaço livre.</p></div></div>`;
+ const rest=tasks.filter(t=>t.id!==cur?.id);
+ $("#tasks").innerHTML=rest.length?rest.map(t=>taskHTML(t)).join(""):`<p class="hint">Suas outras tarefas aparecerão aqui.</p>`;
+ $$("[data-done]").forEach(b=>b.onclick=()=>{const t=tasks.find(x=>x.id===b.dataset.done);if(t){t.done=!t.done;saveTasks();render();toast(t.done?"Tarefa concluída. Bom trabalho!":"Tarefa reaberta.")}});
+ $$("[data-delete]").forEach(b=>b.onclick=()=>{const t=tasks.find(x=>x.id===b.dataset.delete);if(t&&confirm(`Excluir “${t.title}”?`)){tasks=tasks.filter(x=>x.id!==t.id);saveTasks();render();toast("Tarefa excluída.")}});
+ $$("[data-edit]").forEach(b=>b.onclick=()=>editTask(b.dataset.edit));
+ $$("[data-start]").forEach(b=>b.onclick=()=>openFocus(b.dataset.start));
+}
+function show(id){const d=$("#"+id);if(!d.open)d.showModal()}
+function close(id){const d=$("#"+id);if(d.open)d.close()}
+function openTask(id){$("#task-form").reset();$("#editing-id").value=id||"";$("#task-modal-title").textContent=id?"Editar tarefa":"O que você precisa fazer?";if(id){const t=tasks.find(x=>x.id===id);if(!t)return;$("#task-name").value=t.title;$("#task-when").value=t.when;$("#task-time").value=t.time||"";$("#task-remind").value=t.remind||"none"}else{$("#task-when").value="later"}show("task-modal");setTimeout(()=>$("#task-name").focus(),50)}
+function editTask(id){openTask(id)}
+$("#add-task").onclick=()=>openTask();
+$("#task-form").onsubmit=e=>{e.preventDefault();const title=$("#task-name").value.trim();if(!title)return;const id=$("#editing-id").value;const time=$("#task-time").value,remind=$("#task-remind").value;if(remind!=="none"&&!time){toast("Informe um horário para configurar o alarme.");$("#task-time").focus();return}const data={title,when:$("#task-when").value,time,remind};if(id){Object.assign(tasks.find(t=>t.id===id),data)}else{tasks.unshift({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()),...data,done:false,created:Date.now()})}saveTasks();render();close("task-modal");toast(id?"Tarefa atualizada.":"Tarefa adicionada.");}
+function applyPrefs(){
+ document.body.dataset.theme=prefs.theme==="natural"?"":prefs.theme;
+ document.body.classList.toggle("small",prefs.font===0);document.body.classList.toggle("large",prefs.font===2);
+ document.body.classList.toggle("reading",!!prefs.reading);document.body.classList.toggle("reduce-motion",!!prefs.motion);
+ $("#font-range").value=prefs.font;$("#font-label").textContent=["Menor","Padrão","Maior"][prefs.font];
+ $("#reading").checked=!!prefs.reading;$("#simple").checked=!!prefs.simple;$("#motion").checked=!!prefs.motion;
+ $("#later-section").classList.toggle("focus-hidden",!!prefs.simple);
+ $$("[data-theme-choice]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.themeChoice===prefs.theme)));
+ localStorage.setItem(PREFS,JSON.stringify(prefs));
+}
+$("#open-settings").onclick=()=>show("settings-modal");$("#nav-settings").onclick=()=>show("settings-modal");
+$("#open-focus").onclick=()=>openFocus();
+$$("[data-close]").forEach(b=>b.onclick=()=>close(b.dataset.close));
+["task-modal","settings-modal","focus-modal"].forEach(id=>$("#"+id).addEventListener("click",e=>{if(e.target===e.currentTarget)close(id)}));
+$$("[data-theme-choice]").forEach(b=>b.onclick=()=>{prefs.theme=b.dataset.themeChoice;applyPrefs()});
+$("#font-range").oninput=e=>{prefs.font=Number(e.target.value);applyPrefs()};
+$("#reading").onchange=e=>{prefs.reading=e.target.checked;applyPrefs()};
+$("#simple").onchange=e=>{prefs.simple=e.target.checked;applyPrefs()};
+$("#motion").onchange=e=>{prefs.motion=e.target.checked;applyPrefs()};
+function ensureAudio(){try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;if(!audioCtx)audioCtx=new C();if(audioCtx.state==="suspended")audioCtx.resume();return audioCtx}catch{return null}}
+function beep(){const ctx=ensureAudio();if(!ctx)return false;try{const now=ctx.currentTime;[0,0.24,0.48].forEach((delay,i)=>{const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type="sine";osc.frequency.value=i===1?1046:880;gain.gain.setValueAtTime(0.0001,now+delay);gain.gain.exponentialRampToValueAtTime(0.22,now+delay+0.025);gain.gain.exponentialRampToValueAtTime(0.0001,now+delay+0.18);osc.connect(gain);gain.connect(ctx.destination);osc.start(now+delay);osc.stop(now+delay+0.2)});return true}catch{return false}}
+function alarmTime(task,now=new Date()){if(!task.time||task.remind==="none"||!task.remind||task.done)return null;const [h,m]=task.time.split(":").map(Number);const due=new Date(now.getFullYear(),now.getMonth(),now.getDate(),h,m,0,0);if(task.remind!=="at")due.setMinutes(due.getMinutes()-Number(task.remind));return due}
+function localDay(d=new Date()){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`}
+function fireAlarm(task){const key=`${task.id}:${localDay()}`;if(firedAlarms.has(key))return;firedAlarms.add(key);try{localStorage.setItem("um-passo-fired-alarms",JSON.stringify([...firedAlarms]))}catch{};if(!document.hidden){$("#alarm-task-name").textContent=task.title;if(!$("#alarm-modal").open){try{$("#alarm-modal").showModal()}catch{toast(`Lembrete: ${task.title}`)}}beep();if("vibrate"in navigator)navigator.vibrate?.([250,100,250,100,500])}if("Notification"in window&&Notification.permission==="granted"){try{new Notification("Um Passo — lembrete",{body:task.title,tag:key,renotify:false})}catch{}}}
+function checkAlarms(){const now=new Date();tasks.forEach(t=>{const due=alarmTime(t,now);if(!due)return;const delta=now-due;const day=`${t.id}:${localDay(now)}`;if(delta>=0&&delta<90000&&!firedAlarms.has(day))fireAlarm(t)})}
+function openFocus(id){const t=tasks.find(x=>x.id===id)||tasks.find(x=>!x.done);$("#focus-name").textContent=t?t.title:"Escolha uma tarefa para começar.";show("focus-modal")}
+function displayTimer(){$("#timer").textContent=`${String(Math.floor(timerSecs/60)).padStart(2,"0")}:${String(timerSecs%60).padStart(2,"0")}`}
+function stopTimer(){clearInterval(timerId);timerId=null;running=false;$("#timer-start").textContent="Continuar"}
+$$("[data-min]").forEach(b=>b.onclick=()=>{stopTimer();timerSecs=Number(b.dataset.min)*60;$$("[data-min]").forEach(x=>x.classList.toggle("selected",x===b));$("#timer-start").textContent="Começar";displayTimer()});
+$("#timer-start").onclick=()=>{if(running){stopTimer();return}running=true;$("#timer-start").textContent="Pausar";timerId=setInterval(()=>{timerSecs--;displayTimer();if(timerSecs<=0){stopTimer();beep();toast("Tempo concluído. Se quiser, faça uma pausa.");if("vibrate"in navigator)navigator.vibrate?.([150,80,150]);if("Notification"in window&&Notification.permission==="granted"){try{new Notification("Um Passo — foco concluído",{body:"Seu tempo de foco terminou."})}catch{}}}},1000)};
+$("#timer-reset").onclick=()=>{stopTimer();timerSecs=Number($(".timer-options .selected")?.dataset.min||10)*60;$("#timer-start").textContent="Começar";displayTimer()};
+$("#focus-modal").addEventListener("close",stopTimer);
+try{firedAlarms=new Set(JSON.parse(localStorage.getItem("um-passo-fired-alarms")||"[]"))}catch{firedAlarms=new Set()}
+$("#dismiss-alarm").onclick=()=>{$("#alarm-modal").close();if("vibrate"in navigator)navigator.vibrate?.(0)};
+$("#test-alarm").onclick=()=>{const ok=beep();if(!ok){$("#notification-status").textContent="Este navegador não conseguiu iniciar o áudio. Toque novamente após interagir com a página."}else toast("Teste de som do alarme.")};
+$("#enable-notifications").onclick=async()=>{if(!("Notification"in window)){$("#notification-status").textContent="Este navegador não oferece notificações.";return}try{const p=await Notification.requestPermission();$("#notification-status").textContent=p==="granted"?"Permissão concedida. Avisos agendados ainda dependem do app estar ativo.":p==="denied"?"Permissão negada nas configurações do navegador.":"Permissão não concedida."}catch{$("#notification-status").textContent="Não foi possível solicitar permissão."}};
+function dateLabel(){const s=new Intl.DateTimeFormat("pt-BR",{weekday:"long",day:"numeric",month:"long"}).format(new Date());$("#date-label").textContent=s.toLocaleUpperCase("pt-BR")}
+load();applyPrefs();render();dateLabel();checkAlarms();
+// Worker de apoio: tenta manter a checagem ativa quando a aba fica em segundo plano.
+let alarmWorker=null;try{if("Worker" in window){alarmWorker=new Worker("./alarm-worker.js");alarmWorker.onmessage=()=>checkAlarms();}}catch{}
+// Fallback e recuperação ao voltar para a página.
+alarmInterval=setInterval(checkAlarms,15000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkAlarms()});window.addEventListener("focus",checkAlarms);document.addEventListener("pointerdown",()=>ensureAudio(),{once:true});
+if("serviceWorker"in navigator && location.protocol.startsWith("http"))window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+})();
+</script>
+</body></html>
